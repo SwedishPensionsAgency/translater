@@ -24,4 +24,13 @@ language, e.g. \code{en}, and \code{domain}. The
 the language columns. You can provide as many language
 columns as you need.
 }
+\seealso{
+Other translation.table:
+\code{\link{get_missing_translations}};
+\code{\link{record_missing_translations}}
+
+Other translation.table:
+\code{\link{get_missing_translations}};
+\code{\link{record_missing_translations}}
+}
 

@@ -9,7 +9,7 @@
 #' @param level used for verbose purpose to keep track of the nesting in the object
 #' @details If you would like to translate the strings in an object containing references to environments, e.g. a ggplot object, you should use \code{\link{copy_object}} to copy the original object. Otherwise the original object may not behave as you would expect. 
 #' @export
-translate_object <- function(
+translate_object <- function (
   object, 
   source.language = "sv", 
   target.language = "en", 
@@ -17,10 +17,8 @@ translate_object <- function(
   skip = c("required_aes", "objname"), 
   verbose = TRUE, 
   level = 1
-){
-  if (is.null(getOption("translation.table"))) {
-    stop("There is no translation table availible. Please load a table with options(translation.table = your.translation.table).")
-  }
+) {
+  get_translation_table()
   #browser()
   if (is.atomic(object) && !is.factor(object)) {
     if (is.character(object)) {

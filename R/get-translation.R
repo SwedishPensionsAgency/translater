@@ -7,25 +7,23 @@
 #' @param target.language target language, column name in the translation table
 #' @param domain domain to identify the object in the translation table, makes each entry of the translation table unique
 #' @export
-get_translation <- function(
+get_translation <- function (
   string, 
   source.language = "sv", 
   target.language = "en", 
-  domain = NULL){
+  domain = NULL) {
   translation.table <- get_translation_table()
-  if (is.null(translation.table)) {
-    stop("There is no translation table availible. Please load a table with options(translation.table = your.translation.table).")
-  }
   translation <- subset(x = translation.table, 
                         subset = translation.table[[source.language]] == string & 
                           translation.table[["domain"]] == domain)
-  if (nrow(translation) > 0) {
+  if (nrow(translation) > 0 && as.character(translation[[target.language]])[1] != "") {
     if (nrow(translation) > 1) {
       warning("There is more than one translation that matches your string. The first in the translation table is returnd.")
     }
     return(as.character(translation[[target.language]])[1])
   } else {
     warning("There is no translation for '", string, "'. Please add one to the translation table.")
+    record_missing_translations(string, source.language, domain)
     return(string)
   }
 }

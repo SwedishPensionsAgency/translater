@@ -1,4 +1,5 @@
 export(copy_object)
+export(get_missing_translations)
 export(get_translation)
 export(get_translation_table)
 export(set_translation_table)

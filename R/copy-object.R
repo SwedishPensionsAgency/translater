@@ -4,7 +4,7 @@
 #' 
 #' @param object object to be copied
 #' @export
-copy_object <- function(object){
+copy_object <- function (object) {
   tmp <- tempfile("RData")
   save(object, file = tmp, compress = "gzip")
   tmp_env <- new.env(parent=emptyenv())
