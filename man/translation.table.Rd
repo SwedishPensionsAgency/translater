@@ -26,11 +26,9 @@ columns as you need.
 }
 \seealso{
 Other translation.table:
-\code{\link{get_missing_translations}};
-\code{\link{record_missing_translations}}
+\code{\link{get_missing_translations}}
 
 Other translation.table:
-\code{\link{get_missing_translations}};
-\code{\link{record_missing_translations}}
+\code{\link{get_missing_translations}}
 }
 

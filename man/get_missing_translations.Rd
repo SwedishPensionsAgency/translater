@@ -10,7 +10,6 @@ Get missing translations as a table
 \seealso{
 Other translation.table:
 \code{\link{get_translation_table}},
-\code{\link{set_translation_table}};
-\code{\link{record_missing_translations}}
+\code{\link{set_translation_table}}
 }
 

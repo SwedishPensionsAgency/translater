@@ -20,20 +20,23 @@ set_translation_table <- function (translation.table) {
 #' @family translation table
 #' @rdname translation.table
 #' @export
-get_translation_table <- function () {
+get_translation_table <- function (delete = FALSE) {
   if (is.null(.tables.env$translation.table)) {
     stop("There is no translation table available. Please provide a table with set_translation_table(your.translation.table).")
   }
-  return(.tables.env$translation.table)  
+  return.value <- .tables.env$translation.table
+  rm(translation.table, envir = .tables.env)
+  return(return.value)  
 }
 
 
 #' Add missing translation string to a table of missing translations
 #' 
+#' Internal function to keep the strings that have no translation. 
+#' 
 #' @param string string in the source language
 #' @param source.language source language (abbreviation) of the string
 #' @param domain domain to identify the object in the translation table, makes each entry of the translation table unique
-#' @family translation table
 record_missing_translations <- function (string, source.language, domain) {
   if (is.null(.tables.env$missing.translations)) {
     .tables.env$missing.translations <- .tables.env$translation.table[0,]
