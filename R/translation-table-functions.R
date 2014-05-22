@@ -2,8 +2,8 @@
 #' 
 #' Set/get translation table to use with \code{\link{get_translation}}
 #' 
-#' @param translation.table data frame with at least three columns: a source language, a target language, and domain. 
-#' @details The three columns of the translation table must have the names of the source language, e.g. \code{sv}, the target language, e.g. \code{en}, and \code{domain}. The \code{domain} makes each row unique together with one of the language columns. You can provide as many language columns as you need. 
+#' @param translation.table data frame with at least three columns: a source language, a target language, and object.name. 
+#' @details The three columns of the translation table must have the names of the source language, e.g. \code{sv}, the target language, e.g. \code{en}, and \code{object.name}. The \code{object.name} makes each row unique together with one of the language columns. You can provide as many language columns as you need. 
 #' @family translation table
 #' @rdname translation.table
 #' @export
@@ -36,20 +36,20 @@ get_translation_table <- function (delete = FALSE) {
 #' 
 #' @param string string in the source language
 #' @param source.language source language (abbreviation) of the string
-#' @param domain domain to identify the object in the translation table, makes each entry of the translation table unique
-record_missing_translations <- function (string, source.language, domain) {
+#' @param object.name name of the object to be translated, to identify the object in the translation table, makes each entry of the translation table unique
+record_missing_translations <- function (string, source.language, object.name) {
   if (is.null(.tables.env$missing.translations)) {
     .tables.env$missing.translations <- .tables.env$translation.table[0,]
   }
   #browser()
-  domain <- ifelse(!is.null(domain), domain, "")
+  object.name <- ifelse(!is.null(object.name), object.name, "")
   if (nrow(.tables.env$missing.translations[
-    .tables.env$missing.translations[[source.language]] == string & .tables.env$missing.translations[["domain"]] == domain, ]
+    .tables.env$missing.translations[[source.language]] == string & .tables.env$missing.translations[["object.name"]] == object.name, ]
            ) == 0) {
     missing.translation <- as.list(rep("", ncol(.tables.env$missing.translations)))
     names(missing.translation) <- names(.tables.env$missing.translations)
     missing.translation[[source.language]] <- string
-    missing.translation[["domain"]] <- domain
+    missing.translation[["object.name"]] <- object.name
     .tables.env$missing.translations <- rbind(.tables.env$missing.translations, as.data.frame(missing.translation))
   }
 }

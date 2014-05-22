@@ -3,7 +3,7 @@
 #' @param object object that contains strings to translate
 #' @param source.language the language of the given string, column name in the translation table
 #' @param target.language target language, column name in the translation table
-#' @param domain domain to identify the object in the translation table, makes each entry of the translation table unique
+#' @param object.name name of the object to be translated, to identify the object in the translation table, makes each entry of the translation table unique
 #' @param skip character vector, containing names of object that should not be translated
 #' @param verbose a logical. If TRUE, additional diagnostics are printed
 #' @param level used for verbose purpose to keep track of the nesting in the object
@@ -13,7 +13,7 @@ translate_object <- function (
   object, 
   source.language = "sv", 
   target.language = "en", 
-  domain = NULL,  
+  object.name = NULL,  
   skip = c("required_aes", "objname"), 
   verbose = TRUE, 
   level = 1
@@ -35,7 +35,7 @@ translate_object <- function (
         string.translation <- get_translation(string, 
                                               source.language, 
                                               target.language, 
-                                              domain)
+                                              object.name)
         object[object == string] <- string.translation
         if (verbose) {
           message(rep(" ", level), "'", string, "' : '", string.translation, "'")
@@ -44,7 +44,7 @@ translate_object <- function (
       
       # 2. looping through the whole vector
       #       for (i in 1:length(object)) {
-      #         object[i] <- translate.string(object[i], target.language, domain)
+      #         object[i] <- translate.string(object[i], target.language, object.name)
       #       }
     }
     
@@ -94,7 +94,7 @@ translate_object <- function (
           object.i.translation <- translate_object(object.to.translate, 
                                                    source.language = source.language, 
                                                    target.language = target.language, 
-                                                   domain = domain, 
+                                                   object.name = object.name, 
                                                    skip = skip, 
                                                    verbose = verbose, 
                                                    level = level + 1)
