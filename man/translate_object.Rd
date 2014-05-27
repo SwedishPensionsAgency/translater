@@ -4,8 +4,8 @@
 \title{Translate any string in an object}
 \usage{
 translate_object(object, source.language = "sv", target.language = "en",
-  object.name = NULL, skip = c("required_aes", "objname"), verbose = TRUE,
-  level = 1)
+  object.name = NULL, all.names = FALSE, skip = c("required_aes",
+  "objname", ".self", ".refClassDef"), verbose = TRUE, level = 1)
 }
 \arguments{
 \item{object}{object that contains strings to translate}
@@ -15,6 +15,8 @@ translate_object(object, source.language = "sv", target.language = "en",
 \item{target.language}{target language, column name in the translation table}
 
 \item{object.name}{name of the object to be translated, to identify the object in the translation table, makes each entry of the translation table unique}
+
+\item{all.names}{logical, should all elements be translated, hidden (names begining with '.') elements included? Passed to \link{\code{ls}}}
 
 \item{skip}{character vector, containing names of object that should not be translated}
 

@@ -4,6 +4,7 @@
 #' @param source.language the language of the given string, column name in the translation table
 #' @param target.language target language, column name in the translation table
 #' @param object.name name of the object to be translated, to identify the object in the translation table, makes each entry of the translation table unique
+#' @param all.names logical, should all elements be translated, hidden (names begining with '.') elements included? Passed to \link{\code{ls}}
 #' @param skip character vector, containing names of object that should not be translated
 #' @param verbose a logical. If TRUE, additional diagnostics are printed
 #' @param level used for verbose purpose to keep track of the nesting in the object
@@ -13,8 +14,9 @@ translate_object <- function (
   object, 
   source.language = "sv", 
   target.language = "en", 
-  object.name = NULL,  
-  skip = c("required_aes", "objname"), 
+  object.name = NULL, 
+  all.names = FALSE, 
+  skip = c("required_aes", "objname", ".self", ".refClassDef"), 
   verbose = TRUE, 
   level = 1
 ) {
@@ -56,9 +58,9 @@ translate_object <- function (
       if (is.environment(object)) {
         if (environmentName(object) != environmentName(.GlobalEnv)){
           #           browser()
-          #           object.envir.copy <- as.environment(as.list(object, all.names=TRUE))
+          #           object.envir.copy <- as.environment(as.list(object, all.names=all.names))
           #           attributes(object.envir.copy) <- attributes(object)
-          object.content <- ls(object, all.names = TRUE)
+          object.content <- ls(object, all.names = all.names)
         } else {
           object.content <- NULL
         }
@@ -70,6 +72,8 @@ translate_object <- function (
       if (verbose) {
         message(rep(" ", level-1), "### level ", level, " ###")
       }
+    }
+    if (exists("object.content")) {
       for (i in object.content) {
         if (verbose) {
           message(rep(" ", level-1), 
@@ -78,18 +82,18 @@ translate_object <- function (
                   ", ", 
                   ifelse(!isS4(object), ifelse(!is.null(names(object)[i]), names(object)[i], ""), ""), 
                   "---")
-          if (is.null(getElement(object, i))) {
+          if (is.null(get_element(object, i))) {
             message(rep(" ", level), "Is NULL.")
           }
           if (i %in% skip | isTRUE(names(object)[i] %in% skip)) {
             message(rep(" ", level), "Skipped.")
           }
         }
-        if (!is.null(getElement(object, i)) && !(i %in% skip | isTRUE(names(object)[i] %in% skip))) {
+        if (!is.null(get_element(object, i)) && !(i %in% skip | isTRUE(names(object)[i] %in% skip))) {
           if (is.factor(object)) {
             object.to.translate <- levels(object)
           } else {
-            object.to.translate <- getElement(object, i)
+            object.to.translate <- get_element(object, i)
           }
           object.i.translation <- translate_object(object.to.translate, 
                                                    source.language = source.language, 
@@ -106,6 +110,10 @@ translate_object <- function (
             object[[i]] <- object.i.translation
           }
         }
+      }
+    } else {
+      if (verbose) {
+        message(rep(" ", level), "Is of length zero (0).")
       }
     }
     
