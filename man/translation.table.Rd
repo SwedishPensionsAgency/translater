@@ -6,7 +6,7 @@
 \usage{
 set_translation_table(translation.table)
 
-get_translation_table(delete = FALSE)
+get_translation_table()
 }
 \arguments{
 \item{translation.table}{data frame with at least three columns: a source language, a target language, and object.name.}

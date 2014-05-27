@@ -20,13 +20,11 @@ set_translation_table <- function (translation.table) {
 #' @family translation table
 #' @rdname translation.table
 #' @export
-get_translation_table <- function (delete = FALSE) {
+get_translation_table <- function () {
   if (is.null(.tables.env$translation.table)) {
     stop("There is no translation table available. Please provide a table with set_translation_table(your.translation.table).")
   }
-  return.value <- .tables.env$translation.table
-  rm(translation.table, envir = .tables.env)
-  return(return.value)  
+  return(.tables.env$translation.table)  
 }
 
 
@@ -56,8 +54,13 @@ record_missing_translations <- function (string, source.language, object.name) {
 
 
 #' Get missing translations as a table 
+#' @param delete should the translation table for missing translations being deleted after returning it? 
 #' @export
 #' @family translation table
-get_missing_translations <- function () {
+get_missing_translations <- function (delete = FALSE) {
+  return.value <- .tables.env$missing.translations
+  if (delete) {
+    rm(missing.translations, envir = .tables.env)
+  }
   return(.tables.env$missing.translations)
 }

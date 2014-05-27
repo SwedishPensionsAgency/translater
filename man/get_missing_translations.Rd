@@ -3,7 +3,10 @@
 \alias{get_missing_translations}
 \title{Get missing translations as a table}
 \usage{
-get_missing_translations()
+get_missing_translations(delete = FALSE)
+}
+\arguments{
+\item{delete}{should the translation table for missing translations being deleted after returning it?}
 }
 \description{
 Get missing translations as a table
