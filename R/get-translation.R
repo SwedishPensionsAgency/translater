@@ -12,6 +12,7 @@ get_translation <- function (
   source.language = "sv", 
   target.language = "en", 
   object.name = NULL) {
+  
   translation.table <- get_translation_table()
   translation <- subset(x = translation.table, 
                         subset = translation.table[[source.language]] == string & 
@@ -22,8 +23,11 @@ get_translation <- function (
     }
     return(as.character(translation[[target.language]])[1])
   } else {
-    warning("There is no translation for '", string, "'. Please add one to the translation table.")
-    record_missing_translations(string, source.language, object.name)
+    if (!is_in_missing_translations(string, source.language, object.name)) {
+      warning("There is no translation for '", string, "'. Please add one to the translation table.")
+      record_missing_translations(string, source.language, object.name)
+    }
+    
     return(string)
   }
 }

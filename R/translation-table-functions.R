@@ -36,20 +36,34 @@ get_translation_table <- function () {
 #' @param source.language source language (abbreviation) of the string
 #' @param object.name name of the object to be translated, to identify the object in the translation table, makes each entry of the translation table unique
 record_missing_translations <- function (string, source.language, object.name) {
+  
   if (is.null(.tables.env$missing.translations)) {
     .tables.env$missing.translations <- .tables.env$translation.table[0,]
   }
-  #browser()
   object.name <- ifelse(!is.null(object.name), object.name, "")
-  if (nrow(.tables.env$missing.translations[
-    .tables.env$missing.translations[[source.language]] == string & .tables.env$missing.translations[["object.name"]] == object.name, ]
-           ) == 0) {
+  if (!is_in_missing_translations(string, source.language, object.name)) {
     missing.translation <- as.list(rep("", ncol(.tables.env$missing.translations)))
     names(missing.translation) <- names(.tables.env$missing.translations)
     missing.translation[[source.language]] <- string
     missing.translation[["object.name"]] <- object.name
     .tables.env$missing.translations <- rbind(.tables.env$missing.translations, as.data.frame(missing.translation))
   }
+}
+
+#' Is the string already in the table for missing translations? 
+#' 
+#' @param string string in the source language
+#' @param source.language source language (abbreviation) of the string
+#' @param object.name name of the object to be translated, to identify the object in the translation table, makes each entry of the translation table unique
+#' 
+is_in_missing_translations <- function (string, source.language, object.name) {
+  if (is.null(.tables.env$missing.translations)) {
+    return(FALSE)
+  }
+  object.name <- ifelse(!is.null(object.name), object.name, "")
+  return(nrow(.tables.env$missing.translations[
+    .tables.env$missing.translations[[source.language]] == string & .tables.env$missing.translations[["object.name"]] == object.name, ]
+  ) > 0)
 }
 
 
