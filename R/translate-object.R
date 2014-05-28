@@ -17,7 +17,7 @@ translate_object <- function (
   object.name = NULL, 
   all.names = FALSE, 
   skip = c("required_aes", "objname", ".self", ".refClassDef"), 
-  verbose = TRUE, 
+  verbose = FALSE, 
   level = 1
 ) {
   get_translation_table()
