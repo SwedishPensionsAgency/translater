@@ -76,5 +76,5 @@ get_missing_translations <- function (delete = FALSE) {
   if (delete) {
     rm(missing.translations, envir = .tables.env)
   }
-  return(.tables.env$missing.translations)
+  return(return.value)
 }
