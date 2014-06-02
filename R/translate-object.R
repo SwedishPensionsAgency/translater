@@ -33,15 +33,18 @@ translate_object <- function (
         message(rep(" ", level-1), "Translated strings '", source.language, "'' : '", target.language, "'")
       }
       for (string in unique.strings) {
-        
-        string.translation <- get_translation(string, 
-                                              source.language, 
-                                              target.language, 
-                                              object.name)
-        object[object == string] <- string.translation
+        if (string != "") {
+          string.translation <- get_translation(string, 
+                                                source.language, 
+                                                target.language, 
+                                                object.name)
+          object[object == string] <- string.translation
+        } else {
+          string.translation <- string
+        }
         if (verbose) {
           message(rep(" ", level), "'", string, "' : '", string.translation, "'")
-        }
+        }  
       }
       
       # 2. looping through the whole vector
