@@ -33,7 +33,8 @@ translate_object <- function (
         message(rep(" ", level-1), "Translated strings '", source.language, "'' : '", target.language, "'")
       }
       for (string in unique.strings) {
-        if (string != "") {
+        
+        if (isTRUE(string != "")) {
           string.translation <- get_translation(string, 
                                                 source.language, 
                                                 target.language, 
