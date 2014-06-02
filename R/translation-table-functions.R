@@ -73,7 +73,7 @@ is_in_missing_translations <- function (string, source.language, object.name) {
 #' @family translation table
 get_missing_translations <- function (delete = FALSE) {
   return.value <- .tables.env$missing.translations
-  if (delete) {
+  if (delete && exists("missing.translations", envir = .tables.env)) {
     rm(missing.translations, envir = .tables.env)
   }
   return(return.value)
