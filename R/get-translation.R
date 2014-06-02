@@ -14,9 +14,8 @@ get_translation <- function (
   object.name = NULL) {
   
   translation.table <- get_translation_table()
-  translation <- subset(x = translation.table, 
-                        subset = translation.table[[source.language]] == string & 
-                          translation.table[["object.name"]] == object.name)
+  translation <- translation.table[(translation.table[[source.language]] == string & 
+                                      translation.table[["object.name"]] == object.name), ]
   if (nrow(translation) > 0 && as.character(translation[[target.language]])[1] != "") {
     if (nrow(translation) > 1) {
       warning("There is more than one translation that matches your string. The first in the translation table is returnd.", "(string: '", string, "', source.language: '", source.language, "', target.language: '", target.language, "', object.name: '", object.name, "')")
