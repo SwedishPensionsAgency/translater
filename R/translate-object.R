@@ -4,11 +4,11 @@
 #' @param source.language the language of the given string, column name in the translation table
 #' @param target.language target language, column name in the translation table
 #' @param object.name name of the object to be translated, to identify the object in the translation table, makes each entry of the translation table unique
-#' @param all.names logical, should all elements be translated, hidden (names begining with '.') elements included? Passed to \link{\code{ls}}
+#' @param all.names logical, should all elements be translated, hidden (names begining with '.') elements included? Passed to \code{\link{ls}}
 #' @param skip character vector, containing names of object that should not be translated
 #' @param verbose a logical. If TRUE, additional diagnostics are printed
 #' @param level used for verbose purpose to keep track of the nesting in the object
-#' @details If you would like to translate the strings in an object containing references to environments, e.g. a ggplot object, you should use \code{\link{copy_object}} to copy the original object. Otherwise the original object may not behave as you would expect. 
+#' @details If you would like to translate the strings in an object containing references to environments, e.g. a ggplot object or a reference class object, you should use \code{\link{copy_object}} to copy the original object. Otherwise the original object may not behave as you would expect. 
 #' @export
 translate_object <- function (
   object, 

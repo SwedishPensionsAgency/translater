@@ -16,7 +16,7 @@ translate_object(object, source.language = "sv", target.language = "en",
 
 \item{object.name}{name of the object to be translated, to identify the object in the translation table, makes each entry of the translation table unique}
 
-\item{all.names}{logical, should all elements be translated, hidden (names begining with '.') elements included? Passed to \link{\code{ls}}}
+\item{all.names}{logical, should all elements be translated, hidden (names begining with '.') elements included? Passed to \code{\link{ls}}}
 
 \item{skip}{character vector, containing names of object that should not be translated}
 
@@ -28,6 +28,6 @@ translate_object(object, source.language = "sv", target.language = "en",
 Translate any string in an object
 }
 \details{
-If you would like to translate the strings in an object containing references to environments, e.g. a ggplot object, you should use \code{\link{copy_object}} to copy the original object. Otherwise the original object may not behave as you would expect.
+If you would like to translate the strings in an object containing references to environments, e.g. a ggplot object or a reference class object, you should use \code{\link{copy_object}} to copy the original object. Otherwise the original object may not behave as you would expect.
 }
 
