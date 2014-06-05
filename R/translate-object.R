@@ -64,19 +64,27 @@ translate_object <- function (
       }
       func.env.content <- ls(func.env, all.names = all.names)
       for (element.name in func.env.content) {
-        
-        
-        element <- get_element(func.env, element.name)
-        if (!is.null(element) && !is.function(element)) {
-          translated.element <- translate_object(element, 
-                                                 source.language = source.language, 
-                                                 target.language = target.language, 
-                                                 object.name = object.name, 
-                                                 skip = skip, 
-                                                 verbose = verbose, 
-                                                 level = level + 1)
-          assign(element.name, translated.element, envir = func.env)
+        if (verbose) {
+          message(rep(" ", level), "--- ", element.name, " ---")
         }
+        if (!element.name %in% skip) {
+          element <- get_element(func.env, element.name)
+          if (!is.null(element) && !is.function(element)) {
+            translated.element <- translate_object(element, 
+                                                   source.language = source.language, 
+                                                   target.language = target.language, 
+                                                   object.name = object.name, 
+                                                   skip = skip, 
+                                                   verbose = verbose, 
+                                                   level = level + 1)
+            assign(element.name, translated.element, envir = func.env)
+          }
+        } else {
+          if (verbose) {
+            message(rep(" ", level+1), "Skipped.")
+          }
+        }
+        
         
       }
     }
