@@ -10,7 +10,18 @@ get_element <- function (object, name) {
     class(object) <- "list"
   }
   if (is.environment(object) && !.hasSlot(object, name)) {
-    return(get(name, envir = object))
+    if (exists(name, envir = object, inherits = FALSE)) {
+      # non initialized variables in function environmnets exists but can be returned by 'get'
+      return.value <- try(get(name, envir = object), silent=TRUE)
+      if ("try-error" %in% class(return.value)) {
+        return(NULL)
+      } else {
+        return(return.value)
+      }
+    } else {
+      return(NULL)
+    }
+    
   } else if (is.numeric(name)) {
     if (isS4(object)) {
       return(slot(object, name))

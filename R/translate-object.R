@@ -53,7 +53,33 @@ translate_object <- function (
       #         object[i] <- translate.string(object[i], target.language, object.name)
       #       }
     }
-    
+  } else if (is.function(object)) {
+    # functions can have calling environments that contain character variables that should be translated. 
+    # only one level of calling environments will be searched
+    func.env <- environment(object)
+    if (environmentName(func.env) == "") {
+      if (verbose) {
+        message(rep(" ", level-1), "### level ", level, " ###")
+        message(rep(" ", level-1), "--- function environment: ", environmentName(func.env), " ---")
+      }
+      func.env.content <- ls(func.env, all.names = all.names)
+      for (element.name in func.env.content) {
+        
+        
+        element <- get_element(func.env, element.name)
+        if (!is.null(element) && !is.function(element)) {
+          translated.element <- translate_object(element, 
+                                                 source.language = source.language, 
+                                                 target.language = target.language, 
+                                                 object.name = object.name, 
+                                                 skip = skip, 
+                                                 verbose = verbose, 
+                                                 level = level + 1)
+          assign(element.name, translated.element, envir = func.env)
+        }
+        
+      }
+    }
   } else if (!is.function(object) && !is.symbol(object)) {
     object.slotNames <- slotNames(object)
     if (isS4(object) && length(object.slotNames) > 0) {
