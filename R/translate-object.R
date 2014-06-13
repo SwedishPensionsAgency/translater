@@ -18,8 +18,15 @@ translate_object <- function (
   all.names = FALSE, 
   skip = c("required_aes", "objname", ".self", ".refClassDef"), 
   verbose = FALSE, 
-  level = 1
+  level = NULL
 ) {
+  
+  if (is.null(level)) {
+    level <- 1
+    # empty list to keep track of translated environments
+    assign("translated.environments", list(0), envir = .translated.environments.env)
+  }
+  
   get_translation_table()
   #browser()
   if (is.atomic(object) && !is.factor(object)) {
@@ -55,50 +62,71 @@ translate_object <- function (
     }
   } else if (is.function(object)) {
     # functions can have calling environments that contain character variables that should be translated. 
+    
+    
     # only one level of calling environments will be searched
     func.env <- environment(object)
-    if (environmentName(func.env) == "") {
-      if (verbose) {
-        message(rep(" ", level-1), "### level ", level, " ###")
-        message(rep(" ", level-1), "--- function environment: ", environmentName(func.env), " ---")
-      }
-      func.env.content <- ls(func.env, all.names = all.names)
-      for (element.name in func.env.content) {
-        if (verbose) {
-          message(rep(" ", level), "--- ", element.name, " ---")
-        }
-        if (!element.name %in% skip) {
-          element <- get_element(func.env, element.name)
-          if (!is.null(element) && !is.function(element)) {
-            translated.element <- translate_object(element, 
-                                                   source.language = source.language, 
-                                                   target.language = target.language, 
-                                                   object.name = object.name, 
-                                                   skip = skip, 
-                                                   verbose = verbose, 
-                                                   level = level + 1)
-            assign(element.name, translated.element, envir = func.env)
-          }
-        } else {
-          if (verbose) {
-            message(rep(" ", level+1), "Skipped.")
-          }
-        }
-        
-        
+    translate.environment <- TRUE
+    for (env in .translated.environments.env$translated.environments) {
+      if (identical(func.env, env)) {
+        translate.environment <- FALSE
+        break
       }
     }
+    if (translate.environment) {
+      if (environmentName(func.env) == "") {
+        if (verbose) {
+          message(rep(" ", level-1), "### level ", level, " ###")
+          message(rep(" ", level-1), "--- function environment: ", environmentName(func.env), " ---")
+        }
+        func.env.content <- ls(func.env, all.names = all.names)
+        for (element.name in func.env.content) {
+          if (verbose) {
+            message(rep(" ", level), "--- ", element.name, " ---")
+          }
+          if (!element.name %in% skip) {
+            element <- get_element(func.env, element.name)
+            if (!is.null(element) && !is.function(element)) {
+              translated.element <- translate_object(element, 
+                                                     source.language = source.language, 
+                                                     target.language = target.language, 
+                                                     object.name = object.name, 
+                                                     skip = skip, 
+                                                     verbose = verbose, 
+                                                     level = level + 1)
+              assign(element.name, translated.element, envir = func.env)
+            }
+          } else {
+            if (verbose) {
+              message(rep(" ", level+1), "Skipped.")
+            }
+          }
+          
+          
+        }
+      }
+      .translated.environments.env$translated.environments <- c(.translated.environments.env$translated.environments, list(func.env))
+    }
+    
   } else if (!is.function(object) && !is.symbol(object)) {
     object.slotNames <- slotNames(object)
     if (isS4(object) && length(object.slotNames) > 0) {
       object.content <- object.slotNames
     } else if (length(object) > 0) {
       if (is.environment(object)) {
-        if (environmentName(object) != environmentName(.GlobalEnv)){
+        translate.environment <- TRUE
+        for (env in .translated.environments.env$translated.environments) {
+          if (identical(object, env)) {
+            translate.environment <- FALSE
+            break
+          }
+        }
+        if (translate.environment && environmentName(object) != environmentName(.GlobalEnv)){
           #           browser()
           #           object.envir.copy <- as.environment(as.list(object, all.names=all.names))
           #           attributes(object.envir.copy) <- attributes(object)
           object.content <- ls(object, all.names = all.names)
+          .translated.environments.env$translated.environments <- c(.translated.environments.env$translated.environments, list(object))
         } else {
           object.content <- NULL
         }
@@ -156,5 +184,11 @@ translate_object <- function (
     }
     
   }
+  
+  # reset empty list to keep track of translated environments
+  if (level == 1) {
+    assign("translated.environments", list(0), envir = .translated.environments.env)
+  }
+  
   return(object)
 }

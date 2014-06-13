@@ -23,7 +23,7 @@ get_translation <- function (
     return(as.character(translation[[target.language]])[1])
   } else {
     if (!is_in_missing_translations(string, source.language, object.name)) {
-      warning("There is no translation for '", string, "'. Please add one to the translation table.")
+      warning("There is no translation for '", string, "'. Please add one to the translation table.", "(string: '", string, "', source.language: '", source.language, "', target.language: '", target.language, "', object.name: '", object.name, "')")
       record_missing_translations(string, source.language, object.name)
     }
     

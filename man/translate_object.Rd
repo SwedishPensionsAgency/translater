@@ -5,7 +5,7 @@
 \usage{
 translate_object(object, source.language = "sv", target.language = "en",
   object.name = NULL, all.names = FALSE, skip = c("required_aes",
-  "objname", ".self", ".refClassDef"), verbose = FALSE, level = 1)
+  "objname", ".self", ".refClassDef"), verbose = FALSE, level = NULL)
 }
 \arguments{
 \item{object}{object that contains strings to translate}
