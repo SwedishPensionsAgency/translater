@@ -5,7 +5,7 @@
 \usage{
 translate_object(object, source.language = "sv", target.language = "en",
   object.name = NULL, all.names = FALSE, skip = c("required_aes",
-  "objname", ".self", ".refClassDef"), verbose = FALSE, level = 1)
+  "objname", ".self", ".refClassDef"), verbose = FALSE, level = NULL)
 }
 \arguments{
 \item{object}{object that contains strings to translate}
@@ -22,7 +22,7 @@ translate_object(object, source.language = "sv", target.language = "en",
 
 \item{verbose}{a logical. If TRUE, additional diagnostics are printed}
 
-\item{level}{used for verbose purpose to keep track of the nesting in the object}
+\item{level}{used to keep track of the nesting in the object, do not change}
 }
 \description{
 Translate any string in an object
