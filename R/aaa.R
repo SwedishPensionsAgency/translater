@@ -3,5 +3,4 @@
   assign(".tables.env", new.env(), envir= asNamespace(pkgname))
   
   assign(".translated.environments.env", new.env(), envir= asNamespace(pkgname))
-  assign(".level.env", new.env(), envir= asNamespace(pkgname))
 }

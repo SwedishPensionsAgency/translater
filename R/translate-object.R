@@ -7,7 +7,7 @@
 #' @param all.names logical, should all elements be translated, hidden (names begining with '.') elements included? Passed to \code{\link{ls}}
 #' @param skip character vector, containing names of object that should not be translated
 #' @param verbose a logical. If TRUE, additional diagnostics are printed
-#' @param level used for verbose purpose to keep track of the nesting in the object
+#' @param level used to keep track of the nesting in the object, do not change
 #' @details If you would like to translate the strings in an object containing references to environments, e.g. a ggplot object or a reference class object, you should use \code{\link{copy_object}} to copy the original object. Otherwise the original object may not behave as you would expect. 
 #' @export
 translate_object <- function (
@@ -185,8 +185,8 @@ translate_object <- function (
     
   }
   
-  # reset empty list to keep track of translated environments
   if (level == 1) {
+    # reset empty list to keep track of translated environments
     assign("translated.environments", list(0), envir = .translated.environments.env)
   }
   
