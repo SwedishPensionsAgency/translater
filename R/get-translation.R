@@ -13,6 +13,11 @@ get_translation <- function (
   target.language = "en", 
   object.name = NULL) {
   
+  # if the string contains only a number, no translation is necessary
+  if (!is.na(suppressWarnings(as.numeric(string)))) {
+    return(string)
+  }
+  
   translation.table <- get_translation_table()
   translation <- translation.table[(translation.table[[source.language]] == string & 
                                       translation.table[["object.name"]] == object.name), ]
